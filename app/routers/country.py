@@ -8,6 +8,7 @@ from contextlib import contextmanager
 import schemas
 import models
 import oauth2 
+import utils
 
 
 router = APIRouter(tags= ["Countries"])  # tags is for what group it should add it to in the fastapi doc
@@ -15,8 +16,6 @@ router = APIRouter(tags= ["Countries"])  # tags is for what group it should add 
 metadata = MetaData()
 countriesTable = Table('Countries1', metadata, autoload_with=engine)
 
-password = open(r"C:\Users\dadaa\OneDrive\Desktop\password.txt", "r").read()
-password = password.strip()
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -27,7 +26,7 @@ def psycopg2Cursor():
     conn = psycopg2.connect(
     dbname="ItemsAPI",
     user="postgres",
-    password=password,
+    password=utils.settings.DATABASE_PASSWORD,
     host="localhost",
     port="5432",
     cursor_factory=RealDictCursor
