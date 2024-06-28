@@ -18,9 +18,9 @@ fastapi==0.68.0
 graphene==2.1.9
 graphql-core==2.3.2
 graphql-relay==2.0.1
-greenlet==1.1.1
+greenlet
 h11==0.12.0
-httptools==0.3.0
+httptools
 idna==3.2
 itsdangerous==1.1.0
 Jinja2==2.11.3
