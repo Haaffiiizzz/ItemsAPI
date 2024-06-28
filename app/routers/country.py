@@ -32,6 +32,7 @@ def psycopg2Cursor():
     cursor_factory=RealDictCursor
     )
     try:
+        
         cursor = conn.cursor()
         yield cursor
         conn.commit()
