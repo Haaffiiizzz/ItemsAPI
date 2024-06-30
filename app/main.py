@@ -1,15 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import Table, MetaData
-import models
+from .models import Base
 from routers import users, country, auth
-import database
-engine = database.engine
+from .database import engine
+
 
 metadata = MetaData()
 countriesTable = Table('Countries1', metadata, autoload_with=engine)
 
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 app.add_middleware(
