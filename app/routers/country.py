@@ -1,14 +1,14 @@
 from fastapi import status, HTTPException, Body, Depends, APIRouter
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from database import engine, get_db
+from ..database import engine, get_db
 from sqlalchemy.orm import Session
 from sqlalchemy import Table, MetaData
 from contextlib import contextmanager
-import schemas
-import models
-import oauth2 
-import utils
+from ..schemas import AddData
+from ..models import Base
+from ..oauth2 import getCurrentUser
+from ..utils import settings
 
 
 router = APIRouter(tags= ["Countries"])  # tags is for what group it should add it to in the fastapi doc
@@ -17,7 +17,7 @@ metadata = MetaData()
 countriesTable = Table('Countries1', metadata, autoload_with=engine)
 
 
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 @contextmanager
 def psycopg2Cursor():
@@ -26,7 +26,7 @@ def psycopg2Cursor():
     conn = psycopg2.connect(
     dbname="ItemsAPI",
     user="postgres",
-    password=utils.settings.DATABASE_PASSWORD,
+    password=settings.DATABASE_PASSWORD,
     host="localhost",
     port="5432",
     cursor_factory=RealDictCursor
@@ -90,7 +90,7 @@ def Get_One_Country(country: str, db: Session = Depends(get_db)):
 
 
 @router.put("/countries/{country}", status_code=status.HTTP_201_CREATED)
-def Add_Items(country, newData: schemas.AddData = Body(...), currUser: int = Depends(oauth2.getCurrentUser)):
+def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(getCurrentUser)):
     #  first check to make sure we have the right data format
     #  send back to user and print data
 

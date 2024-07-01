@@ -1,9 +1,9 @@
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
-import schemas
+from .schemas import TokenData
 from fastapi import Depends, status, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from config import settings
+from .config import settings
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
@@ -32,7 +32,7 @@ def verifyToken(token: str, credentialsException):
         if not id:
             raise credentialsException
         
-        token_data = schemas.TokenData(id=str(id))
+        token_data = TokenData(id=str(id))
     
     except JWTError:
         raise credentialsException
