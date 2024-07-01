@@ -1,6 +1,6 @@
 from fastapi import status, HTTPException, Body, Depends, APIRouter
-import psycopg2
-from psycopg2.extras import RealDictCursor
+# import psycopg2
+# from psycopg2.extras import RealDictCursor
 from ..database import engine, get_db
 from sqlalchemy.orm import Session
 from sqlalchemy import Table, MetaData
@@ -19,31 +19,31 @@ countriesTable = Table('Countries1', metadata, autoload_with=engine)
 
 Base.metadata.create_all(bind=engine)
 
-@contextmanager
-def psycopg2Cursor():
-    # this is for use in adding to the countries as I couldnt use sqlalchemy
+# @contextmanager
+# def psycopg2Cursor():
+#     # this is for use in adding to the countries as I couldnt use sqlalchemy
 
-    conn = psycopg2.connect(
-    dbname=settings.DATABASE_NAME,
-    user=settings.DATABASE_USERNAME,
-    password=settings.DATABASE_PASSWORD,
-    host=settings.DATABASE_HOSTNAME,
-    port=settings.DATABASE_PORT,
-    cursor_factory=RealDictCursor
-    )
-    try:
+#     conn = psycopg2.connect(
+#     dbname=settings.DATABASE_NAME,
+#     user=settings.DATABASE_USERNAME,
+#     password=settings.DATABASE_PASSWORD,
+#     host=settings.DATABASE_HOSTNAME,
+#     port=settings.DATABASE_PORT,
+#     cursor_factory=RealDictCursor
+#     )
+#     try:
         
-        cursor = conn.cursor()
-        yield cursor
-        conn.commit()
+#         cursor = conn.cursor()
+#         yield cursor
+#         conn.commit()
     
-    except Exception as Ex:
-        conn.rollback()
-        raise Ex
+#     except Exception as Ex:
+#         conn.rollback()
+#         raise Ex
     
-    finally:
-        cursor.close()
-        conn.close()
+#     finally:
+#         cursor.close()
+#         conn.close()
 
 
 @router.get("/")
@@ -89,46 +89,46 @@ def Get_One_Country(country: str, db: Session = Depends(get_db)):
     return {"Country": country, "Items": items}
 
 
-@router.put("/countries/{country}", status_code=status.HTTP_201_CREATED)
-def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(getCurrentUser)):
-    #  first check to make sure we have the right data format
-    #  send back to user and print data
+# @router.put("/countries/{country}", status_code=status.HTTP_201_CREATED)
+# def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(getCurrentUser)):
+#     #  first check to make sure we have the right data format
+#     #  send back to user and print data
 
     
-    country = country.title()
-    with psycopg2Cursor() as cursor:
-        cursor.execute(f'SELECT * FROM "Countries1" WHERE name = \'{country}\';')
-        row = cursor.fetchone()
+#     country = country.title()
+#     with psycopg2Cursor() as cursor:
+#         cursor.execute(f'SELECT * FROM "Countries1" WHERE name = \'{country}\';')
+#         row = cursor.fetchone()
 
-        if not row:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                                detail=f"{country} not found")
-        # check if the row is valid i.e the country is in the database
+#         if not row:
+#             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+#                                 detail=f"{country} not found")
+#         # check if the row is valid i.e the country is in the database
         
-        for itemName in newData.items.keys():
-            cursor.execute(f"""
-                DO $$
-                BEGIN
-                    IF NOT EXISTS (
-                        SELECT 1
-                        FROM information_schema.columns 
-                        WHERE table_name='Countries1' AND column_name= \'{itemName}\'
-                    ) THEN
-                        ALTER TABLE "Countries1" ADD COLUMN "{itemName}" NUMERIC;
-                    END IF;
-                END
-                $$;
-            """)
+#         for itemName in newData.items.keys():
+#             cursor.execute(f"""
+#                 DO $$
+#                 BEGIN
+#                     IF NOT EXISTS (
+#                         SELECT 1
+#                         FROM information_schema.columns 
+#                         WHERE table_name='Countries1' AND column_name= \'{itemName}\'
+#                     ) THEN
+#                         ALTER TABLE "Countries1" ADD COLUMN "{itemName}" NUMERIC;
+#                     END IF;
+#                 END
+#                 $$;
+#             """)
         
-        #  create new row with the name of the item if the row is not already available
-        #  note: null will be the value
+#         #  create new row with the name of the item if the row is not already available
+#         #  note: null will be the value
         
-        for itemName, itemPrice in newData.items.items():
-            cursor.execute(
-                f'UPDATE "Countries1" SET "{itemName}" = %s WHERE name = %s;',
-                (itemPrice, country)
-            )
+#         for itemName, itemPrice in newData.items.items():
+#             cursor.execute(
+#                 f'UPDATE "Countries1" SET "{itemName}" = %s WHERE name = %s;',
+#                 (itemPrice, country)
+#             )
         
-    # update the database i.e replace null with the right stuff
+#     # update the database i.e replace null with the right stuff
     
-    return {"Added prices": {"Country" : country.title(), "items": newData}}
+#     return {"Added prices": {"Country" : country.title(), "items": newData}}
