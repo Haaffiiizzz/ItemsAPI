@@ -23,15 +23,16 @@ Base.metadata.create_all(bind=engine)
 def psycopg2Cursor():
     # this is for use in adding to the countries as I couldnt use sqlalchemy
 
-    conn = psycopg2.connect(
-    dbname=settings.DATABASE_NAME,
-    user=settings.DATABASE_USERNAME,
-    password=settings.DATABASE_PASSWORD,
-    host=settings.DATABASE_HOSTNAME,
-    port=settings.DATABASE_PORT,
-    cursor_factory=RealDictCursor,
-    sslmode = 'require'
-    )
+    conn_params = {
+        'dbname': settings.DATABASE_NAME,
+        'user': settings.DATABASE_USERNAME,
+        'password': settings.DATABASE_PASSWORD,
+        'host': settings.DATABASE_HOSTNAME,
+        'port': settings.DATABASE_PORT,
+        'sslmode': 'require'
+    }
+
+    conn = psycopg2.connect(**conn_params, cursor_factory=RealDictCursor)
     try:
         
         cursor = conn.cursor()
