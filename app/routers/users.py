@@ -1,5 +1,5 @@
 from fastapi import status, HTTPException, Depends, APIRouter
-from database import engine, get_db
+from ..database import engine, get_db
 from sqlalchemy.orm import Session
 from sqlalchemy import Table, MetaData
 from ..schemas import UserResponse, CreateUser
