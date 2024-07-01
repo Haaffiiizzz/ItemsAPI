@@ -8,7 +8,7 @@ from .config import settings
 SQL_DB_URL = f"postgresql://{settings.DATABASE_USERNAME}:{settings.DATABASE_PASSWORD}@{settings.DATABASE_HOSTNAME}:{settings.DATABASE_PORT}/{settings.DATABASE_NAME}"
 # SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
 
-engine = create_engine(SQL_DB_URL)
+engine = create_engine(SQL_DB_URL + "?sslmode=require")
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine) 
 
