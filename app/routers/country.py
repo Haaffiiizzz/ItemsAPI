@@ -8,7 +8,7 @@ from contextlib import contextmanager
 from ..schemas import AddData
 from ..models import Base
 from ..oauth2 import getCurrentUser
-from ..utils import settings
+from ..config import settings
 
 
 router = APIRouter(tags= ["Countries"])  # tags is for what group it should add it to in the fastapi doc
@@ -24,11 +24,11 @@ def psycopg2Cursor():
     # this is for use in adding to the countries as I couldnt use sqlalchemy
 
     conn = psycopg2.connect(
-    dbname="ItemsAPI",
-    user="postgres",
+    dbname=settings.DATABASE_NAME,
+    user=settings.DATABASE_USERNAME,
     password=settings.DATABASE_PASSWORD,
-    host="localhost",
-    port="5432",
+    host=settings.DATABASE_HOSTNAME,
+    port=settings.DATABASE_PORT,
     cursor_factory=RealDictCursor
     )
     try:
