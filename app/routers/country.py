@@ -13,7 +13,7 @@ from ..config import settings
 
 router = APIRouter(tags= ["Countries"])  # tags is for what group it should add it to in the fastapi doc
 
-# metadata = MetaData()
+metadata = MetaData()
 # countriesTable = Table('Countries1', metadata, autoload_with=engine)
 
 
