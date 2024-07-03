@@ -72,7 +72,7 @@ def Get_One_Country(country: str, db: Session = Depends(get_db)):
     #  and its items and prices
     country = country.title()
 
-    row = db.query(Country).filter(Country.c.name == country).first()
+    row = db.query(Country).filter(Country.name == country).first()
     #  check if the row is valid i.e country in data base else raise error
     if not row:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -90,7 +90,7 @@ def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(get
     
     country = country.title()
     with psycopg2Cursor() as cursor:
-        cursor.execute(f'SELECT * FROM "Countries1" WHERE name = \'{country}\';')
+        cursor.execute(f'SELECT * FROM "Countries" WHERE name = \'{country}\';')
         row = cursor.fetchone()
 
         if not row:
@@ -105,9 +105,9 @@ def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(get
                     IF NOT EXISTS (
                         SELECT 1
                         FROM information_schema.columns 
-                        WHERE table_name='Countries1' AND column_name= \'{itemName}\'
+                        WHERE table_name='Countries' AND column_name= \'{itemName}\'
                     ) THEN
-                        ALTER TABLE "Countries1" ADD COLUMN "{itemName}" NUMERIC;
+                        ALTER TABLE "Countries" ADD COLUMN "{itemName}" NUMERIC;
                     END IF;
                 END
                 $$;
@@ -118,7 +118,7 @@ def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(get
         
         for itemName, itemPrice in newData.items.items():
             cursor.execute(
-                f'UPDATE "Countries1" SET "{itemName}" = %s WHERE name = %s;',
+                f'UPDATE "Countries" SET "{itemName}" = %s WHERE name = %s;',
                 (itemPrice, country)
             )
         
