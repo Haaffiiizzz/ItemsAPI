@@ -52,7 +52,7 @@ def root(db: Session = Depends(get_db)):
     # this is the base site without any paths
 
     countries = db.query(Country).all()
-    countryNames = [row.name for row in countries]
+    countryNames = [row.country for row in countries]
     return {"message": f"Welcome to my Items API. Below is a list of all countries available.",
             "countries": countryNames}
 
