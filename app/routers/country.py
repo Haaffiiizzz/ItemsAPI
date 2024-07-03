@@ -72,7 +72,7 @@ def Get_One_Country(country: str, db: Session = Depends(get_db)):
     #  and its items and prices
     country = country.title()
 
-    row = db.query(Country).filter(Country.name == country).first()
+    row = db.query(Country).filter(Country.country == country).first()
     #  check if the row is valid i.e country in data base else raise error
     if not row:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
