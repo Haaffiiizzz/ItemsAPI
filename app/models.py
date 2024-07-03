@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, TIMESTAMP, text
 
 class Country(Base):
     __tablename__ = "Countries1"
-    name = Column(String, unique = True, primary_key=False)
+    name = Column(String, unique = True, primary_key=True)
     Coke_0_33_Liter = Column(Integer)
     Gasoline_Petrol_1_Liter = Column(Integer)
     Eggs_1_Dozen = Column(Integer)
