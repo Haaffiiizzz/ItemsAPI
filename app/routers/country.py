@@ -61,16 +61,9 @@ def root(db: Session = Depends(get_db)):
 def Get_All_Countries(db: Session = Depends(get_db), limit: int = None):
 
     countries = db.query(Country).limit(limit).all()
-    result = [{column.name: getattr(row, column.name) for column in countriesTable.columns} for row in countries]
-    # result is a list of dicts, with each cloumn name in the table as key
-    # and the items in the columns as values
-    resultDict = {}
-    for Dict in result:
-        name = Dict["name"]
-        itemsDict = {key:value for key, value in Dict.items() if key != "name"}
-        resultDict[name] = itemsDict
+    
 
-    return resultDict
+    return countries
 
 
 @router.get("/countries/{country}")
@@ -85,9 +78,8 @@ def Get_One_Country(country: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"{country} not found")
     #  format the data
-    rowDict = {column: value for column, value in zip(Country.columns.keys(), row)}
-    items = {key: value for key, value in rowDict.items() if key != 'name'}
-    return {"Country": country, "Items": items}
+    
+    return row
 
 
 @router.put("/countries/{country}", status_code=status.HTTP_201_CREATED)

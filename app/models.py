@@ -1,20 +1,10 @@
 from .database import Base
-from sqlalchemy import Column, Integer, String, TIMESTAMP, text
+from sqlalchemy import Column, String, Integer, JSON, TIMESTAMP, text
 
 class Country(Base):
-    __tablename__ = "Countries1"
-    name = Column(String, unique = True, primary_key=True)
-    Coke_0_33_Liter = Column(Integer)
-    Gasoline_Petrol_1_Liter = Column(Integer)
-    Eggs_1_Dozen = Column(Integer)
-    Beef_1_KG = Column(Integer)
-    Rice_1_KG = Column(Integer)
-    Apples_1_KG = Column(Integer)
-    Loaf_of_Bread_500g = Column(Integer)
-    Water_1_5_Liters = Column(Integer)
-    Toyota_Corolla = Column(Integer)
-    Milk_1_Liter = Column(Integer)
-    Hair_Cut = Column(Integer)
+    __tablename__ = "Countries"
+    country = Column(String, primary_key=True, unique=True)
+    items = Column(JSON)
 
 class User(Base):
     __tablename__ = "users"
