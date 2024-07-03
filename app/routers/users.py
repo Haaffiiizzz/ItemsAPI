@@ -10,8 +10,6 @@ from ..oauth2 import getCurrentUser
 
 router = APIRouter(prefix = "/users", tags = ['Users'])
 
-metadata = MetaData()
-countriesTable = Table('Countries1', metadata, autoload_with=engine)
 
 Base.metadata.create_all(bind=engine)
 
