@@ -56,6 +56,9 @@ def root(db: Session = Depends(get_db)):
     return {"message": f"Welcome to my Items API. Below is a list of all countries available.",
             "countries": countryNames}
 
+@router.get("/Opeyemi")
+def ope(db: Session = Depends(get_db)):
+    return {"Question": "WHy are you gay?"}
 
 @router.get("/countries")
 def Get_All_Countries(db: Session = Depends(get_db), limit: int = None):
