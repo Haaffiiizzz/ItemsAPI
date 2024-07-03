@@ -7,7 +7,6 @@ from .database import engine
 
 
 metadata = MetaData()
-countriesTable = Table('Countries1', metadata, autoload_with=engine)
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
