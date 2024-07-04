@@ -83,45 +83,66 @@ def Get_One_Country(country: str, db: Session = Depends(get_db)):
 
 
 @router.put("/countries/{country}", status_code=status.HTTP_201_CREATED)
-def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(getCurrentUser)):
+def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_db)):
     #  first check to make sure we have the right data format
     #  send back to user and print data
 
-    
+    # currUser: int = Depends(getCurrentUser), add this to add_items arguements latrer
     country = country.title()
-    with psycopg2Cursor() as cursor:
-        cursor.execute(f'SELECT * FROM "Countries" WHERE name = \'{country}\';')
-        row = cursor.fetchone()
 
-        if not row:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                                detail=f"{country} not found")
-        # check if the row is valid i.e the country is in the database
+    row = db.query(Country).filter(Country.country == country).first()
+    #  check if the row is valid i.e country in data base else raise error
+    if not row:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"{country} not found")
+    #  format the data
+    
+    countryItems = row.items
+    for item, value in newData.items:
+        if item not in countryItems:
+            countryItems[item] = value
+
+    row.items = countryItems        
+    newItems = Country(**row.items)
+    db.add(newItems)
+    db.commit()
+    db.refresh(newItems)
+    return newItems
+
+
+    # with psycopg2Cursor() as cursor:
+    #     cursor.execute(f'SELECT * FROM "Countries" WHERE name = \'{country}\';')
+    #     row = cursor.fetchone()
+
+    #     if not row:
+    #         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+    #                             detail=f"{country} not found")
+    #     # check if the row is valid i.e the country is in the database
         
-        for itemName in newData.items.keys():
-            cursor.execute(f"""
-                DO $$
-                BEGIN
-                    IF NOT EXISTS (
-                        SELECT 1
-                        FROM information_schema.columns 
-                        WHERE table_name='Countries' AND column_name= \'{itemName}\'
-                    ) THEN
-                        ALTER TABLE "Countries" ADD COLUMN "{itemName}" NUMERIC;
-                    END IF;
-                END
-                $$;
-            """)
+    #     for itemName in newData.items.keys():
+    #         cursor.execute(f"""
+    #             DO $$
+    #             BEGIN
+    #                 IF NOT EXISTS (
+    #                     SELECT 1
+    #                     FROM information_schema.columns 
+    #                     WHERE table_name='Countries' AND column_name= \'{itemName}\'
+    #                 ) THEN
+    #                     ALTER TABLE "Countries" ADD COLUMN "{itemName}" NUMERIC;
+    #                 END IF;
+    #             END
+    #             $$;
+    #         """)
         
-        #  create new row with the name of the item if the row is not already available
-        #  note: null will be the value
+    #     #  create new row with the name of the item if the row is not already available
+    #     #  note: null will be the value
         
-        for itemName, itemPrice in newData.items.items():
-            cursor.execute(
-                f'UPDATE "Countries" SET "{itemName}" = %s WHERE name = %s;',
-                (itemPrice, country)
-            )
+    #     for itemName, itemPrice in newData.items.items():
+    #         cursor.execute(
+    #             f'UPDATE "Countries" SET "{itemName}" = %s WHERE name = %s;',
+    #             (itemPrice, country)
+    #         )
         
-    # update the database i.e replace null with the right stuff
+    # # update the database i.e replace null with the right stuff
     
     return {"Added prices": {"Country" : country.title(), "items": newData}}

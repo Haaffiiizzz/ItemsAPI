@@ -6,6 +6,7 @@ from datetime import datetime
 class AddData(BaseModel):
     #  this makes sure we are getting the right data format else it
     # throws an error
+    country : str
     items: dict
 
 class CreateUser(BaseModel):
