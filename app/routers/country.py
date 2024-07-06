@@ -102,7 +102,7 @@ def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_d
         if item not in countryItems:
             countryItems[item] = value
 
-    updated_row = Country(
+    newRow = Country(
             country=row.country,
             items=countryItems
         )
@@ -111,9 +111,9 @@ def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_d
     db.delete(row)
     
     # Add the updated row
-    db.add(updated_row)
+    db.add(newRow)
     db.commit()
-    db.refresh(updated_row)
+    db.refresh(newRow)
 
 
     return {"Added prices": {"Country" : country.title(), "items": updated_row.items}}
