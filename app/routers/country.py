@@ -107,42 +107,6 @@ def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_d
     db.add(row)
     db.commit()
     db.refresh(row)
-    return row
 
-
-    # with psycopg2Cursor() as cursor:
-    #     cursor.execute(f'SELECT * FROM "Countries" WHERE name = \'{country}\';')
-    #     row = cursor.fetchone()
-
-    #     if not row:
-    #         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-    #                             detail=f"{country} not found")
-    #     # check if the row is valid i.e the country is in the database
-        
-    #     for itemName in newData.items.keys():
-    #         cursor.execute(f"""
-    #             DO $$
-    #             BEGIN
-    #                 IF NOT EXISTS (
-    #                     SELECT 1
-    #                     FROM information_schema.columns 
-    #                     WHERE table_name='Countries' AND column_name= \'{itemName}\'
-    #                 ) THEN
-    #                     ALTER TABLE "Countries" ADD COLUMN "{itemName}" NUMERIC;
-    #                 END IF;
-    #             END
-    #             $$;
-    #         """)
-        
-    #     #  create new row with the name of the item if the row is not already available
-    #     #  note: null will be the value
-        
-    #     for itemName, itemPrice in newData.items.items():
-    #         cursor.execute(
-    #             f'UPDATE "Countries" SET "{itemName}" = %s WHERE name = %s;',
-    #             (itemPrice, country)
-    #         )
-        
-    # # update the database i.e replace null with the right stuff
-    
-    return {"Added prices": {"Country" : country.title(), "items": newData}}
+ 
+    return {"Added prices": {"Country" : country.title(), "items": row}}
