@@ -109,9 +109,10 @@ def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_d
     print("row.items", row.items)
     print("row:", row)        
     
-    db.add(row)
+    newRow = Country(row)
+    db.add(newRow)
     db.commit()
-    db.refresh(row)
+    db.refresh(newRow)
 
 
     return {"Added prices": {"Country" : country.title(), "items": row.items}}
