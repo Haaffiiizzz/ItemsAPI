@@ -106,8 +106,8 @@ def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_d
     # newItems = Country(**row)
     db.add(row)
     db.commit()
-    db.refresh(newItems)
-    return newItems
+    db.refresh(row)
+    return row
 
 
     # with psycopg2Cursor() as cursor:
