@@ -96,23 +96,24 @@ def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_d
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"{country} not found")
     #  format the data
-    print("first row", row)
-
+    
     countryItems = row.items
-    print(countryItems)
     for item, value in newData.items.items():
         if item not in countryItems:
             countryItems[item] = value
-    print("second countryitems", countryItems)
 
-    row.items = countryItems
-    print("row.items", row.items)
-    print("row:", row)        
+    updated_row = Country(
+            country=row.country,
+            items=countryItems
+        )
+        
+    # Delete the old row
+    db.delete(row)
     
-    newRow = Country(**row)
-    db.add(newRow)
+    # Add the updated row
+    db.add(updated_row)
     db.commit()
-    db.refresh(newRow)
+    db.refresh(updated_row)
 
 
     return {"Added prices": {"Country" : country.title(), "items": row.items}}
