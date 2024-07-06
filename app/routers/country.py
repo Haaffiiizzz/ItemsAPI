@@ -116,4 +116,4 @@ def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_d
     db.refresh(updated_row)
 
 
-    return {"Added prices": {"Country" : country.title(), "items": row.items}}
+    return {"Added prices": {"Country" : country.title(), "items": updated_row.items}}
