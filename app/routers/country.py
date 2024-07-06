@@ -98,7 +98,7 @@ def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_d
     #  format the data
     
     countryItems = row.items
-    for item, value in newData.items:
+    for item, value in newData.items.items():
         if item not in countryItems:
             countryItems[item] = value
 
