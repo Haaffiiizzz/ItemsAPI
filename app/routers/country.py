@@ -109,7 +109,7 @@ def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_d
     print("row.items", row.items)
     print("row:", row)        
     
-    newRow = Country(row)
+    newRow = Country(**row.dict())
     db.add(newRow)
     db.commit()
     db.refresh(newRow)
