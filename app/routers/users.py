@@ -32,6 +32,6 @@ def Get_User(id: int, db: Session = Depends(get_db), currUser: int = Depends(get
     user = db.query(User).filter(User.id == id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"User with id {id} not found")
+                            detail=f"User with id  {id}  not found")
 
     return user
