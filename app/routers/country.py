@@ -3,7 +3,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from ..database import engine, get_db
 from sqlalchemy.orm import Session
-from sqlalchemy import Table, MetaData
+from sqlalchemy import MetaData
 from contextlib import contextmanager
 from ..schemas import AddData
 from ..models import Base, Country
@@ -53,7 +53,7 @@ def root(db: Session = Depends(get_db)):
 
     countries = db.query(Country).all()
     countryNames = [row.country for row in countries]
-    return {"message": f"Welcome to my Items API. Below is a list of all countries available.",
+    return {"message": f"Welcome to my Items API. My github username is Haaffiizzz and my LinkedIn is linkedin.com/in/haaffiiizzz. Below is a list of all countries available.",
             "countries": countryNames}
 
 
@@ -83,11 +83,11 @@ def Get_One_Country(country: str, db: Session = Depends(get_db)):
 
 
 @router.put("/countries/{country}", status_code=status.HTTP_201_CREATED)
-def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_db)):
+def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(getCurrentUser), db: Session = Depends(get_db)):
     #  first check to make sure we have the right data format
     #  send back to user and print data
 
-    # currUser: int = Depends(getCurrentUser), add this to add_items arguements latrer
+    # , add this to add_items arguements latrer
     country = country.title()
 
     row = db.query(Country).filter(Country.country == country).first()
@@ -116,4 +116,4 @@ def Add_Items(country, newData: AddData = Body(...), db: Session = Depends(get_d
     db.refresh(newRow)
 
 
-    return {"Added prices": {"Country" : country.title(), "items": updated_row.items}}
+    return {"Added prices": {"Country" : country.title(), "items": newRow.items}}
