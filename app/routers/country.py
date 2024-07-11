@@ -61,7 +61,7 @@ def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(get
     # , add this to add_items arguements latrer
     country = country.title()
 
-    row = db.query(Country).filter(Country.country == country).first()
+    row = db.query(Country2).filter(Country2.country == country).first()
     #  check if the row is valid i.e country in data base else raise error
     if not row:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -73,7 +73,7 @@ def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(get
         if item not in countryItems:
             countryItems[item] = value
 
-    newRow = Country(
+    newRow = Country2(
             country=row.country,
             items=countryItems
         )
