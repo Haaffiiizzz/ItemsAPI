@@ -3,7 +3,7 @@ from ..database import engine, get_db
 from sqlalchemy.orm import Session
 from sqlalchemy import MetaData
 from ..schemas import AddData
-from ..models import Base, Country
+from ..models import Base, Country, Country2
 from ..oauth2 import getCurrentUser
 
 
@@ -27,20 +27,23 @@ def root(db: Session = Depends(get_db)):
 
 @router.get("/countries")
 def Get_All_Countries(db: Session = Depends(get_db), limit: int = None, table: str = "private"):
-
-    countries = db.query(Country).limit(limit).all()
-    
+    if table == "public":
+        countries = db.query(Country2).limit(limit).all()
+    else:
+        countries = db.query(Country).limit(limit).all()
 
     return countries
 
 
 @router.get("/countries/{country}")
-def Get_One_Country(country: str, db: Session = Depends(get_db)):
+def Get_One_Country(country: str, db: Session = Depends(get_db), table: str = "private"):
     #  in this path we should return a json of just a country
     #  and its items and prices
     country = country.title()
-
-    row = db.query(Country).filter(Country.country == country).first()
+    if table == "public":
+        row = db.query(Country2).filter(Country2.country == country).first()
+    else:
+        row = db.query(Country).filter(Country.country == country).first()
     #  check if the row is valid i.e country in data base else raise error
     if not row:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
