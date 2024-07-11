@@ -1,14 +1,10 @@
 from fastapi import status, HTTPException, Body, Depends, APIRouter
-import psycopg2
-from psycopg2.extras import RealDictCursor
 from ..database import engine, get_db
 from sqlalchemy.orm import Session
 from sqlalchemy import MetaData
-from contextlib import contextmanager
 from ..schemas import AddData
 from ..models import Base, Country
 from ..oauth2 import getCurrentUser
-from ..config import settings
 
 
 router = APIRouter(tags= ["Countries"])  # tags is for what group it should add it to in the fastapi doc
@@ -17,34 +13,6 @@ metadata = MetaData()
 
 
 Base.metadata.create_all(bind=engine)
-
-@contextmanager
-def psycopg2Cursor():
-    # this is for use in adding to the countries as I couldnt use sqlalchemy
-
-    conn_params = {
-        'dbname': settings.DATABASE_NAME,
-        'user': settings.DATABASE_USERNAME,
-        'password': settings.DATABASE_PASSWORD,
-        'host': settings.DATABASE_HOSTNAME,
-        'port': settings.DATABASE_PORT,
-        'sslmode': 'require'
-    }
-
-    conn = psycopg2.connect(**conn_params, cursor_factory=RealDictCursor)
-    try:
-        
-        cursor = conn.cursor()
-        yield cursor
-        conn.commit()
-    
-    except Exception as Ex:
-        conn.rollback()
-        raise Ex
-    
-    finally:
-        cursor.close()
-        conn.close()
 
 
 @router.get("/")
@@ -58,7 +26,7 @@ def root(db: Session = Depends(get_db)):
 
 
 @router.get("/countries")
-def Get_All_Countries(db: Session = Depends(get_db), limit: int = None):
+def Get_All_Countries(db: Session = Depends(get_db), limit: int = None, table: str = "private"):
 
     countries = db.query(Country).limit(limit).all()
     

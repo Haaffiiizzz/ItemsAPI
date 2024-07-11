@@ -2,9 +2,15 @@ from .database import Base
 from sqlalchemy import Column, String, Integer, JSON, TIMESTAMP, text
 
 class Country(Base):
-    __tablename__ = "Countries"
+    __tablename__ = "Countries_Private"
     country = Column(String, primary_key=True, unique=True)
     items = Column(JSON)
+
+class Country2(Base):
+    __tablename__ = "Countries_Public"
+    country = Column(String, primary_key=True, unique=True)
+    items = Column(JSON)
+
 
 class User(Base):
     __tablename__ = "users"
