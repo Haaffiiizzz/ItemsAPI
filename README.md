@@ -1,6 +1,44 @@
- In this project, I have created an API with data of the prices (in USD) of common items in different countries. More for my learning purposes that for a particular function, it might still be interesting to know the prices of diffrent things in other countries.
-Although there is no proper documentation for this project, this FastAPI provided documentation will show you the basics: https://country-items-api-ebc8cb908cd2.herokuapp.com/docs#/. There are two tables you can get data from: the public table and the private table.
-The private table is the inital data uploaded by me. The public table also has the exact same data at first, but can be modified by anyone who registers a user and logs in. Creating a user and login in can 
-also be found on the documentation in the link provided above.
+# Country Items API
 
-In the course of this project, I learnt quite a lot. The software tools I used includes: FastAPI, Heroku, PostgresQL, Git, Postman.
+This project is an API that provides data on the prices (in USD) of common items in various countries. It is designed for learning purposes but offers an interesting insight into price comparisons across different regions. The API consists of two tables: the public table and the private table. The private table contains the initial data uploaded by me, while the public table, which starts with the same data, can be modified by any registered and logged-in user.
+
+## Features
+
+- Retrieve item prices for different countries
+- Modify public table data by registered users
+- User registration and login functionality
+
+## Tools and Technologies
+
+- **FastAPI**: For building the API
+- **Heroku**: For deploying the application
+- **PostgreSQL**: As the database
+- **Git**: For version control
+- **Postman**: For testing the API
+
+## Skills Learned
+
+- Building and deploying APIs with FastAPI
+- Managing databases with PostgreSQL
+- Version control with Git
+- API testing with Postman
+- Deploying applications to Heroku
+
+
+### Access the Documentation:
+
+Open your browser and go to [API Documentation](https://country-items-api-ebc8cb908cd2.herokuapp.com/docs#/) to explore the API documentation.
+
+## Usage
+
+- **Retrieve Data:** Use the endpoints to get item prices for different countries.
+- **Modify Data:** Register and log in to modify the public table.
+- **User Management:** Create and manage users through the provided endpoints.
+
+## Contribution
+
+Feel free to fork this repository and contribute by submitting pull requests. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+This project is open-source and available under the MIT License.
