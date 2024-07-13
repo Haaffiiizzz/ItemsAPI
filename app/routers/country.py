@@ -7,8 +7,7 @@ from ..models import Base, Country, Country2
 from ..oauth2 import getCurrentUser
 
 
-router = APIRouter(tags= ["Countries"])  # tags is for what group it should add it to in the fastapi doc
-
+router = APIRouter(tags= ["Countries"])  
 metadata = MetaData()
 
 
@@ -17,7 +16,7 @@ Base.metadata.create_all(bind=engine)
 
 @router.get("/")
 def root(db: Session = Depends(get_db)):
-    # this is the base site without any paths
+ 
 
     countries = db.query(Country).all()
     countryNames = [row.country for row in countries]
@@ -37,8 +36,7 @@ def Get_All_Countries(db: Session = Depends(get_db), limit: int = None, table: s
 
 @router.get("/countries/{country}")
 def Get_One_Country(country: str, db: Session = Depends(get_db), table: str = "private"):
-    #  in this path we should return a json of just a country
-    #  and its items and prices
+  
     country = country.title()
     if table == "public":
         row = db.query(Country2).filter(Country2.country == country).first()
@@ -55,18 +53,15 @@ def Get_One_Country(country: str, db: Session = Depends(get_db), table: str = "p
 
 @router.put("/countries/{country}", status_code=status.HTTP_201_CREATED)
 def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(getCurrentUser), db: Session = Depends(get_db)):
-    #  first check to make sure we have the right data format
-    #  send back to user and print data
-
-    # , add this to add_items arguements latrer
+ 
     country = country.title()
 
     row = db.query(Country2).filter(Country2.country == country).first()
-    #  check if the row is valid i.e country in data base else raise error
+    
     if not row:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"{country} not found")
-    #  format the data
+    
     
     countryItems = row.items
     for item, value in newData.items.items():
@@ -78,10 +73,9 @@ def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(get
             items=countryItems
         )
         
-    # Delete the old row
+
     db.delete(row)
-    
-    # Add the updated row
+   
     db.add(newRow)
     db.commit()
     db.refresh(newRow)
