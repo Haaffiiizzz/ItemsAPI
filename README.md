@@ -21,7 +21,7 @@ This project is an API that provides data on the prices (in USD) of common items
 - Building and deploying APIs with FastAPI
 - Managing databases with PostgreSQL
 - Version control with Git
-- API testing with Postman
+- API testing with Postman 
 - Deploying applications to Heroku
 
 
