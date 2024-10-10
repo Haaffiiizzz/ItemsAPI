@@ -14,3 +14,4 @@ class Settings(BaseSettings):
         case_sensitive =True
 
 settings = Settings()
+#laptop almost fixed
