@@ -9,8 +9,6 @@ from ..oauth2 import getCurrentUser
 
 router = APIRouter(tags= ["Countries"])  
 metadata = MetaData()
-
-
 Base.metadata.create_all(bind=engine)
 
 
@@ -51,34 +49,34 @@ def Get_One_Country(country: str, db: Session = Depends(get_db), table: str = "p
     return row
 
 
-@router.put("/countries/{country}", status_code=status.HTTP_201_CREATED)
-def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(getCurrentUser), db: Session = Depends(get_db)):
+# @router.put("/countries/{country}", status_code=status.HTTP_201_CREATED)
+# def Add_Items(country, newData: AddData = Body(...), currUser: int = Depends(getCurrentUser), db: Session = Depends(get_db)):
  
-    country = country.title()
+#     country = country.title()
 
-    row = db.query(Country2).filter(Country2.country == country).first()
+#     row = db.query(Country2).filter(Country2.country == country).first()
     
-    if not row:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"{country} not found")
+#     if not row:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+#                             detail=f"{country} not found")
     
     
-    countryItems = row.items
-    for item, value in newData.items.items():
-        if item not in countryItems:
-            countryItems[item] = value
+#     countryItems = row.items
+#     for item, value in newData.items.items():
+#         if item not in countryItems:
+#             countryItems[item] = value
 
-    newRow = Country2(
-            country=row.country,
-            items=countryItems
-        )
+#     newRow = Country2(
+#             country=row.country,
+#             items=countryItems
+#         )
         
 
-    db.delete(row)
+#     db.delete(row)
    
-    db.add(newRow)
-    db.commit()
-    db.refresh(newRow)
+#     db.add(newRow)
+#     db.commit()
+#     db.refresh(newRow)
 
 
-    return {"Added prices": {"Country" : country.title(), "items": newRow.items}}
+#     return {"Added prices": {"Country" : country.title(), "items": newRow.items}}
