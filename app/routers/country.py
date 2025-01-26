@@ -2,9 +2,8 @@ from fastapi import status, HTTPException, Body, Depends, APIRouter
 from ..database import engine, get_db
 from sqlalchemy.orm import Session
 from sqlalchemy import MetaData
-from ..schemas import AddData
 from ..models import Base, Country, Country2
-from ..oauth2 import getCurrentUser
+
 
 
 router = APIRouter(tags= ["Countries"])  
