@@ -6,4 +6,4 @@ _pychache_
 test.py
 mn
 .vercel
-venv
+venv/
