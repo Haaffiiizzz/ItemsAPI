@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import MetaData
 from .models import Base
-from .routers import users, country, auth
+from .routers import country
 from .database import engine
 
 
